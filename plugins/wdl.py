@@ -3,6 +3,9 @@ import subprocess
 from urllib.parse import unquote
 import time
 from pySmartDL import SmartDL
+from random import choice
+
+glitch = ['( ͡° ͜ʖ ͡°)', '¯\_(ツ)_/¯', '̿̿ ̿̿ ̿̿ ̿\̿\'\̵͇̿̿\з= ( ▀ ͜͞ʖ▀) =ε/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿', '¯\_(ツ)_/¯','ʕ•ᴥ•ʔ', '(ง ͠° ͟ل͜ ͡°)ง', '(;´༎ຶД༎ຶ`)']
 
 
 def wget_dl(url):
@@ -28,14 +31,13 @@ def smart_dl(url, sent_message):
     dest = os.getcwd()
     obj = SmartDL(url, dest, progress_bar= False)
     obj.start(blocking = False)
-    try:
-        while not obj.isFinished():
-            stats = "FileName: {} \nProgress: {:.2f}% \nSpeed: {} \nAlready Downloaded: {} \nEstimated time: {} \n    {}  ".format(temp_name, (obj.get_progress()*100), obj.get_speed(human=True), obj.get_dl_size(human=True),obj.get_eta(human=True),obj.get_progress_bar())
+    while not obj.isFinished():
+        try:
+            stats = "FileName: {} \nProgress: {:.2f}% \nSpeed: {} \nAlready Downloaded: {} \nEstimated time: {} \n  : {}  ".format(temp_name, (obj.get_progress()*100), obj.get_speed(human=True), obj.get_dl_size(human=True),obj.get_eta(human=True),obj.get_progress_bar())
             sent_message.edit_text(stats)
             time.sleep(.5)
-    except:
-        while not obj.isFinished():
-            time.sleep(1)
+        except:
+            sent_message.edit_text(choice(glitch))
 
     if obj.isSuccessful():
         filename = obj.get_dest().split('/')[-1]

@@ -10,7 +10,6 @@ from upload import upload
 from creds import Creds
 from pydrive.auth import GoogleAuth
 from urllib.parse import unquote
-from random import choice
 
 from plugins import TEXT
 
@@ -122,7 +121,6 @@ def UPLOAD(update, context):
     url = url.split()[-1]
     sent_message = context.bot.send_message(
         chat_id=update.message.chat_id, text=TEXT.PROCESSING)
-    glitch = ['( ͡° ͜ʖ ͡°)', '¯\_(ツ)_/¯', '̿̿ ̿̿ ̿̿ ̿\̿\'\̵͇̿̿\з= ( ▀ ͜͞ʖ▀) =ε/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿', '¯\_(ツ)_/¯','ʕ•ᴥ•ʔ', '(ง ͠° ͟ل͜ ͡°)ง', '(;´༎ຶД༎ຶ`)']
     download_time = 'NA'
     ID = update.message.chat_id
     ID = str(ID)
