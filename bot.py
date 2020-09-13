@@ -185,6 +185,7 @@ def UPLOAD(update, context):
 
             except Exception as e:
                 # switch To second download(SmartDl Downloader) `You can activate it throungh TEXT file`
+                print("***********SMARTDL ERROR*********\n", e)
                 if TEXT.DOWN_TWO:
                     print(TEXT.DOWN_TWO)
                     try:
