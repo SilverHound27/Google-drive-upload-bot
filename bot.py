@@ -375,8 +375,8 @@ dp.add_handler(start_handler)
 downloader_handler = MessageHandler(Filters.regex(r'http'), UPLOAD)
 dp.add_handler(downloader_handler)
 
-file_handler = MessageHandler('file', filedl)
-dp.add_handler(file_handler)
+fileproc_handler = CommandHandler('file', filedl)
+dp.add_handler(fileproc_handler)
 
 help_handler = CommandHandler('help', help)
 dp.add_handler(help_handler)
