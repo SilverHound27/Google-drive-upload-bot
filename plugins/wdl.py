@@ -33,7 +33,7 @@ def smart_dl(url, sent_message):
     obj.start(blocking = False)
     while not obj.isFinished():
         try:
-            stats = "FileName: {} \nProgress: {:.2f}% \nSpeed: {} \nAlready Downloaded: {} \nEstimated time: {} \n  : {}  ".format(temp_name, (obj.get_progress()*100), obj.get_speed(human=True), obj.get_dl_size(human=True),obj.get_eta(human=True),obj.get_progress_bar())
+            stats = "FileName: {} \nProgress: {:.2f}% \nSpeed: {} \nAlready Downloaded: {} \nEstimated time: {} \n    {}  ".format(temp_name, (obj.get_progress()*100), obj.get_speed(human=True), obj.get_dl_size(human=True),obj.get_eta(human=True),obj.get_progress_bar())
             sent_message.edit_text(stats)
             time.sleep(.5)
         except:
