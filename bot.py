@@ -116,11 +116,13 @@ def revoke_tok(update, context):
 @run_async
 def doc_handle(update, context):
     doc = update.message.document
+    print('Doc Recieved: ', doc.file_name)
     file = context.bot.getFile(doc.file_id)
     file.download(doc.file_name)
+    print('Doc downloaded!!')
     doc_returntxt = "File downloaded sucessfully: <code>{}</code> \n\n {}".format(doc.file_name, os.listdir())
     context.bot.send_message(chat_id=update.message.chat_id, text=doc_returntxt, parse_mode=ParseMode.HTML)
-
+    print(os.listdir())
 
 # It will Handle Sent Url
 @run_async
