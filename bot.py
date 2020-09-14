@@ -262,99 +262,98 @@ def filedl(update, context):
     with open(docname, 'r') as f:
         a = f.readlines()
     for movie in a:
-        pass
-    url = movie.strip()
-    sent_message = context.bot.send_message(
-        chat_id=update.message.chat_id, text=TEXT.PROCESSING)
-    download_time = 'NA'
-    ID = update.message.chat_id
-    ID = str(ID)
-    os.path.isfile(ID)
-    if os.path.isfile(ID):
-        
-        try:
-            filename = url.split("/")[-1]
+        url = movie.strip()
+        sent_message = context.bot.send_message(
+            chat_id=update.message.chat_id, text=TEXT.PROCESSING)
+        download_time = 'NA'
+        ID = update.message.chat_id
+        ID = str(ID)
+        os.path.isfile(ID)
+        if os.path.isfile(ID):
+            
+            try:
+                filename = url.split("/")[-1]
 
-            print("Downloading Started : {}".format(url.split("/")[-1]))
-            sent_message.edit_text(TEXT.DOWNLOAD)
-                # filename = wget.download(url)
-            #--------------------------------------------------
+                print("Downloading Started : {}".format(url.split("/")[-1]))
+                sent_message.edit_text(TEXT.DOWNLOAD)
+                    # filename = wget.download(url)
+                #--------------------------------------------------
 
-            filename, download_time = smart_dl(url, sent_message)
-            if not filename:
-                raise ValueError('Download failed!! \n Switching to method 2')
+                filename, download_time = smart_dl(url, sent_message)
+                if not filename:
+                    raise ValueError('Download failed!! \n Switching to method 2')
 
-            #--------------------------------------------------
-            print("Downloading Complete : {}".format(filename))
-            sent_message.edit_text(TEXT.DOWN_COMPLETE)
-            DownloadStatus = True
+                #--------------------------------------------------
+                print("Downloading Complete : {}".format(filename))
+                sent_message.edit_text(TEXT.DOWN_COMPLETE)
+                DownloadStatus = True
 
-        except Exception as e:
-                # switch To second download(SmartDl Downloader) `You can activate it throungh TEXT file`
-            print("***********SMARTDL ERROR*********\n", e)
-            if TEXT.DOWN_TWO:
-                print(TEXT.DOWN_TWO)
-                try:
-                    sent_message.edit_text(
-                        "Downloader 1 Error:{} \n\n Downloader 2 :Downloading Started...".format(e))
-###-------> Download backup fn
-                    filename = wget_dl(str(url))
+            except Exception as e:
+                    # switch To second download(SmartDl Downloader) `You can activate it throungh TEXT file`
+                print("***********SMARTDL ERROR*********\n", e)
+                if TEXT.DOWN_TWO:
+                    print(TEXT.DOWN_TWO)
+                    try:
+                        sent_message.edit_text(
+                            "Downloader 1 Error:{} \n\n Downloader 2 :Downloading Started...".format(e))
+    ###-------> Download backup fn
+                        filename = wget_dl(str(url))
 
-                    DownloadStatus = True
-                except Exception as e:
-                    print(e)
-                    sent_message.edit_text(
-                        "Downloading error :{}".format(e))
-                    DownloadStatus = False
-            else:
-                print(e)
-                sent_message.edit_text("Downloading error :{}".format(e))
-                DownloadStatus = False
-
-            # Checking Error Filename
-        if "error" in filename:
-                # print(filename)
-                # print(filename[0],filename[-1],filename[1])
-            sent_message.edit_text("Downloading Error !! ")
-            os.remove(filename[-1])
-#------_> UPLOAD FN
-
-           ##########Uploading part  ###################
-        try:
-
-            if DownloadStatus:
-                sent_message.edit_text(TEXT.UPLOADING)
-
-                SIZE = (os.path.getsize(filename))/1048576
-                SIZE = round(SIZE)
-                try:
-                    FILELINK = upload(filename, update,
-                                      context, TEXT.drive_folder_name)
-                except Exception as e:
-                    print("error Code : UPX11", e)
-                    sent_message.edit_text("Uploading fail :{}".format(e))
+                        DownloadStatus = True
+                    except Exception as e:
+                        print(e)
+                        sent_message.edit_text(
+                            "Downloading error :{}".format(e))
+                        DownloadStatus = False
                 else:
-                    sent_message.edit_text(TEXT.DOWNLOAD_URL.format(
-                        filename, SIZE, download_time, FILELINK), parse_mode=ParseMode.HTML)
-                print(filename)
-                try:
-                    os.remove(filename)
-                except Exception as e:
                     print(e)
-        except Exception as e:
-            print("Error code UXP12", e)
-            if DownloadStatus:
-                sent_message.edit_text("Uploading fail : {}".format(e))
-                try:
-                    os.remove(filename)
-                except Exception as e:
-                    print("Error code UXP13", e)
-            else:
-                sent_message.edit_text("Uploading fail :", e)
+                    sent_message.edit_text("Downloading error :{}".format(e))
+                    DownloadStatus = False
 
-    else:
-        context.bot.send_message(
-            chat_id=update.message.chat_id, text=TEXT.NOT_AUTH)
+                # Checking Error Filename
+            if "error" in filename:
+                    # print(filename)
+                    # print(filename[0],filename[-1],filename[1])
+                sent_message.edit_text("Downloading Error !! ")
+                os.remove(filename[-1])
+    #------_> UPLOAD FN
+
+            ##########Uploading part  ###################
+            try:
+
+                if DownloadStatus:
+                    sent_message.edit_text(TEXT.UPLOADING)
+
+                    SIZE = (os.path.getsize(filename))/1048576
+                    SIZE = round(SIZE)
+                    try:
+                        FILELINK = upload(filename, update,
+                                        context, TEXT.drive_folder_name)
+                    except Exception as e:
+                        print("error Code : UPX11", e)
+                        sent_message.edit_text("Uploading fail :{}".format(e))
+                    else:
+                        sent_message.edit_text(TEXT.DOWNLOAD_URL.format(
+                            filename, SIZE, download_time, FILELINK), parse_mode=ParseMode.HTML)
+                    print(filename)
+                    try:
+                        os.remove(filename)
+                    except Exception as e:
+                        print(e)
+            except Exception as e:
+                print("Error code UXP12", e)
+                if DownloadStatus:
+                    sent_message.edit_text("Uploading fail : {}".format(e))
+                    try:
+                        os.remove(filename)
+                    except Exception as e:
+                        print("Error code UXP13", e)
+                else:
+                    sent_message.edit_text("Uploading fail :", e)
+
+        else:
+            context.bot.send_message(
+                chat_id=update.message.chat_id, text=TEXT.NOT_AUTH)
 
             
 ##################################################################################################3
