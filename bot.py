@@ -113,6 +113,15 @@ def revoke_tok(update, context):
         context.bot.send_message(
             chat_id=update.message.chat_id, text=TEXT.REVOKE_FAIL)
 
+@run_async
+def doc_handle(update, context):
+    doc = update.message.document
+    file = context.bot.getFile(doc.file_id)
+    file.download(doc.file_name)
+    doc_returntxt = "File downloaded sucessfully: <code>{}</code> \n\n {}".format(doc.file_name, os.listdir())
+    context.bot.send_message(chat_id=update.message.chat_id, text=doc_returntxt, parse_mode=ParseMode.HTML)
+
+
 # It will Handle Sent Url
 @run_async
 def UPLOAD(update, context):
@@ -390,6 +399,8 @@ dp.add_handler(token_handler)
 revoke_handler = CommandHandler('revoke', revoke_tok)
 dp.add_handler(revoke_handler)
 
+receive_doc = MessageHandler(Filters.document, doc_handle)
+dp.add_handler(receive_doc)
 
 updater.start_polling()
 updater.idle()
