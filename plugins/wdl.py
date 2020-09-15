@@ -33,11 +33,15 @@ def smart_dl(url, sent_message):
     obj.start(blocking = False)
     while not obj.isFinished():
         try:
-            stats = "FileName: {} \nProgress: {:.2f}% \nSpeed: {} \nAlready Downloaded: {} \nEstimated time: {} \n    {}  ".format(temp_name, (obj.get_progress()*100), obj.get_speed(human=True), obj.get_dl_size(human=True),obj.get_eta(human=True),obj.get_progress_bar())
+            stats = "FileName: {} \nProgress: {:.2f}% \nSpeed: {} \nAlready Downloaded: {} \n Status: \nEstimated time: {} \n    {}  ".format(
+                temp_name, (obj.get_progress()*100), obj.get_speed(human=True), obj.get_dl_size(human=True),
+                obj.get_eta(human=True), obj.get_status(), obj.get_progress_bar())
             sent_message.edit_text(stats)
+            
             time.sleep(3)
         except:
             sent_message.edit_text(choice(glitch))
+            time.sleep(4)
 
     if obj.isSuccessful():
         filename = obj.get_dest().split('/')[-1]
