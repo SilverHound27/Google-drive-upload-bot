@@ -333,10 +333,12 @@ def filedl(update, context):
             try:
 
                 if DownloadStatus:
-                    sent_message.edit_text(TEXT.UPLOADING)
 
                     SIZE = (os.path.getsize(filename))/1048576
                     SIZE = round(SIZE)
+
+                    sent_message.edit_text(TEXT.UPLOADING.format(filename, SIZE))
+
                     try:
                         FILELINK = upload(filename, update,
                                         context, TEXT.drive_folder_name)
