@@ -115,14 +115,51 @@ def revoke_tok(update, context):
 
 @run_async
 def doc_handle(update, context):
-    doc = update.message.document
-    print('Doc Recieved: ', doc.file_name)
-    file = context.bot.getFile(doc.file_id)
-    file.download(doc.file_name)
-    print('Doc downloaded!!')
-    doc_returntxt = "File downloaded sucessfully: <code>{}</code> \n\n {}".format(doc.file_name, os.listdir())
-    context.bot.send_message(chat_id=update.message.chat_id, text=doc_returntxt, parse_mode=ParseMode.HTML)
-    print(os.listdir())
+            doc = update.message.document
+            print('Doc Recieved: ', doc.file_name)
+            file = context.bot.getFile(doc.file_id)
+            file.download(doc.file_name)
+            print('Doc downloaded!!')
+            filename = doc.file_name
+            send_msg = context.bot.send_message(chat_id=update.message.chat_id, text=filename)
+            try:
+
+                if True:
+
+                    SIZE = (os.path.getsize(filename))/1048576
+                    SIZE = round(SIZE)
+
+                    send_msg.edit_text(TEXT.UPLOADING.format(filename, SIZE))
+
+                    try:
+                        FILELINK = upload(filename, update,
+                                        context, TEXT.drive_folder_name)
+                    except Exception as e:
+                        print("error Code : UPX11", e)
+                        send_msg.edit_text("Uploading fail :{}".format(e))
+                    else:
+                        send_msg.edit_text(TEXT.DOWNLOAD_URL.format(
+                            filename, SIZE, FILELINK), parse_mode=ParseMode.HTML)
+                    print(filename)
+                    try:
+                        os.remove(filename)
+                    except Exception as e:
+                        print(e)
+            except Exception as e:
+                print("Error code UXP12", e)
+                if True:
+                    send_msg.edit_text("Uploading fail : {}".format(e))
+                    try:
+                        os.remove(filename)
+                    except Exception as e:
+                        print("Error code UXP13", e)
+                else:
+                    send_msg.edit_text("Uploading fail :", e)
+
+            else:
+                context.bot.send_message(
+                    chat_id=update.message.chat_id, text=TEXT.NOT_AUTH)
+
 
 # It will Handle Sent Url
 @run_async
